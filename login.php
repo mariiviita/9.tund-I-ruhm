@@ -2,6 +2,9 @@
 	
 	require("functions.php");
 	
+	require("User.class.php");
+	$User = new User($mysqli);
+	
 	// kui on juba sisse loginud siis suunan data lehele
 	if (isset($_SESSION["userId"])){
 		
@@ -104,9 +107,9 @@
 		//echo $serverUsername;
 		
 		// KASUTAN FUNKTSIOONI
-		$signupEmail = cleanInput($signupEmail);
+		$signupEmail = $Helper->cleanInput($signupEmail);
 		
-		signUp($signupEmail, cleanInput($password));
+		$User->signUp($signupEmail, $Helper->cleanInput($password));
 		
 	
 	}
@@ -119,7 +122,7 @@
 		!empty($_POST["loginPassword"])
 	  ) {
 		  
-		$error = login(cleanInput($_POST["loginEmail"]), cleanInput($_POST["loginPassword"]));
+		$error =$User->login($Helper->cleanInput($_POST["loginEmail"]), $Helper->cleanInput($_POST["loginPassword"]));
 		
 	}
 	

@@ -1,24 +1,53 @@
 <?php
+
+	//EDIT LEHT AUTODE MUUTMISEKS
 	//edit.php
 	require("functions.php");
-	require("editFunctions.php");
+	//require("editFunctions.php");
+	
+	require("Car.class.php");
+	$Car = new Car($mysqli);
 	
 	//kas kasutaja uuendab andmeid
 	if(isset($_POST["update"])){
 		
-		updateCar(cleanInput($_POST["id"]), cleanInput($_POST["plate"]), cleanInput($_POST["color"]));
+		$Car->update($Helper->cleanInput($_POST["id"]), $Helper->cleanInput($_POST["plate"]), $Helper->cleanInput($_POST["color"]));
 		
-		header("Location: edit.php?id=".$_POST["id"]."&success=true");
+		header("Location: edit.php?id=".$_POST["id"]."&success=true"); //kasutaja jääb samale lehele
         exit();	
 		
 	}
 	
 	//saadan kaasa id
-	$c = getSingleCarData($_GET["id"]);
-	var_dump($c);
-
+	//$car = getSingleCarData($_GET["id"]);
+	//var_dump($c);
+	//kustutan
+	if(isset($_GET["delete"])){
+		
+		$Car->delete($_GET["id"]);
+		
+		header("Location: data.php");
+		exit();
+	}
+	
+	
+	// kui ei ole id'd aadressireal siis suunan
+	if(!isset($_GET["id"])){
+		header("Location: data.php");
+		exit();
+	}
+	
+	//saadan kaasa id
+	$c = $Car->getSingle($_GET["id"]);
+	//var_dump($c);
+	
+	if(isset($_GET["success"])){
+		echo "salvestamine õnnestus";
+	}
 	
 ?>
+	
+
 <br><br>
 <a href="data.php"> tagasi </a>
 
@@ -32,3 +61,8 @@
   	
 	<input type="submit" name="update" value="Salvesta">
   </form>
+  
+  
+  <br>
+  <br>
+  <a href="?id=<?=$_GET["id"];?>&delete=true">Kustuta</a>

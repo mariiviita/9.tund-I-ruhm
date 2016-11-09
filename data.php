@@ -1,6 +1,9 @@
 <?php 
-	
+	//DATA LEHT AUTODE SALVESTAMISE JAOKS
 	require("functions.php");
+	
+	require("Car.class.php");
+	$Car = new Car($mysqli);
 	
 	//kui ei ole kasutaja id'd
 	if (!isset($_SESSION["userId"])){
@@ -34,12 +37,12 @@
 		!empty($_POST["color"])
 	  ) {
 		  
-		saveCar(cleanInput($_POST["plate"]), cleanInput($_POST["color"]));
+		$Car->save($Helper->cleanInput($_POST["plate"]), $Helper->cleanInput($_POST["color"]));
 		
 	}
 	
 	//saan kõik auto andmed
-	$carData = getAllCars();
+	$carData = $Car->get();
 	//echo "<pre>";
 	//var_dump($carData);
 	//echo "</pre>";
